@@ -1,32 +1,11 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- **/
-import { Server } from 'hapi';
+import { startServer } from './hapi/server/server-util';
+import { config } from './environments/environment';
+import { HapiConfig } from './hapi/server/server-models';
+import { priceQueryPlugIn } from './hapi/plugins/stocks/price-query-plugin';
 
-const init = async () => {
-  const server = new Server({
-    port: 3333,
-    host: 'localhost'
-  });
+const hapiPlugIn: HapiConfig = {    
+    plugins: [priceQueryPlugIn],
+    configParameters: config
 
-  server.route({
-    method: 'GET',
-    path: '/',
-    handler: (request, h) => {
-      return {
-        hello: 'world'
-      };
-    }
-  });
-
-  await server.start();
-  console.log('Server running on %s', server.info.uri);
-};
-
-process.on('unhandledRejection', err => {
-  console.log(err);
-  process.exit(1);
-});
-
-init();
+}
+startServer(hapiPlugIn);
