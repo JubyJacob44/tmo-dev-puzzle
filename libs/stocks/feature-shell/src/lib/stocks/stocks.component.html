@@ -17,16 +17,20 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Favorite time period</mat-label>
-    <mat-select formControlName="period">
-      <mat-option
-        *ngFor="let timePeriod of timePeriods"
-        [value]="timePeriod.value"
-      >
-        {{ timePeriod.viewValue }}
-      </mat-option>
-    </mat-select>
+  <mat-form-field class="example-full-width">
+    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="fromDate" 
+      formControlName="fromDate" placeholder="Choose from date"
+      (dateInput)="resetDate()" (dateChange)="resetDate()">
+    <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+    <mat-datepicker #fromDate></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input matInput [max]="maxDate" [matDatepicker]="toDate" 
+      formControlName="toDate" placeholder="Choose to date"
+      (dateInput)="resetDate()" (dateChange)="resetDate()">
+    <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+    <mat-datepicker #toDate></mat-datepicker>
   </mat-form-field>
 
   <button (click)="fetchQuote()" mat-raised-button>Go</button>

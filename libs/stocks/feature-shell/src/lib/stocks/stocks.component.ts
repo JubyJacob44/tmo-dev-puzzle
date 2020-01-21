@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
+import { subYears } from 'date-fns';
+import { PriceQueryRequest } from '@coding-challenge/stocks/data-access-price-query';
+import { STOCKS_CONSTANT } from '@coding-challenge/stocks/data-access-price-query';
 
 @Component({
   selector: 'coding-challenge-stocks',
@@ -10,34 +13,36 @@ import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-que
 export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
   symbol: string;
-  period: string;
-
+  fromDate: Date;
+  toDate: Date;
+  maxDate: Date = new Date();
+  minDate: Date = subYears(new Date(), 5);
+  
   quotes$ = this.priceQuery.priceQueries$;
-
-  timePeriods = [
-    { viewValue: 'All available data', value: 'max' },
-    { viewValue: 'Five years', value: '5y' },
-    { viewValue: 'Two years', value: '2y' },
-    { viewValue: 'One year', value: '1y' },
-    { viewValue: 'Year-to-date', value: 'ytd' },
-    { viewValue: 'Six months', value: '6m' },
-    { viewValue: 'Three months', value: '3m' },
-    { viewValue: 'One month', value: '1m' }
-  ];
 
   constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
     this.stockPickerForm = fb.group({
       symbol: [null, Validators.required],
-      period: [null, Validators.required]
+      fromDate: [null, Validators.required],
+      toDate: [null, Validators.required]
     });
   }
 
-  ngOnInit() {}
-
+  ngOnInit() {    
+  }
+  /*Since API doesn't support date range input,set the period as max*/
   fetchQuote() {
     if (this.stockPickerForm.valid) {
-      const { symbol, period } = this.stockPickerForm.value;
-      this.priceQuery.fetchQuote(symbol, period);
+      const { symbol, fromDate, toDate } = this.stockPickerForm.value; 
+      const request: PriceQueryRequest = {symbol, period: STOCKS_CONSTANT.MAX, fromDate, toDate};
+      this.priceQuery.fetchQuote(request);
+    }
+  }
+
+  resetDate() {
+    const { symbol, fromDate, toDate } = this.stockPickerForm.value;
+    if(fromDate && toDate && fromDate > toDate){
+      this.stockPickerForm.setValue({symbol: symbol, fromDate: toDate, toDate: toDate});
     }
   }
 }

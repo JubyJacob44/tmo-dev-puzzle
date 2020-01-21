@@ -25,3 +25,8 @@ export function transformPriceQueryResponse(
       } as PriceQuery)
   );
 }
+
+export const STOCKS_CONSTANT = {
+  MAX: 'max'
+}
+
