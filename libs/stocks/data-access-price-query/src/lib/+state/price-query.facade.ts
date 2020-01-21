@@ -4,6 +4,7 @@ import { FetchPriceQuery } from './price-query.actions';
 import { PriceQueryPartialState } from './price-query.reducer';
 import { getSelectedSymbol, getAllPriceQueries } from './price-query.selectors';
 import { map, skip } from 'rxjs/operators';
+import { PriceQueryRequest } from './price-query.type';
 
 @Injectable()
 export class PriceQueryFacade {
@@ -18,7 +19,7 @@ export class PriceQueryFacade {
 
   constructor(private store: Store<PriceQueryPartialState>) {}
 
-  fetchQuote(symbol: string, period: string) {
-    this.store.dispatch(new FetchPriceQuery(symbol, period));
+  fetchQuote(request: PriceQueryRequest) {
+    this.store.dispatch(new FetchPriceQuery(request));
   }
 }

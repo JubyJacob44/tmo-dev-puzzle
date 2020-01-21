@@ -29,3 +29,11 @@ export type PriceQueryResponse = {
   label: string;
   changeOverTime: number;
 };
+
+export type PriceQueryRequest = {
+  symbol: string;
+  period: string;
+  fromDate: Date;
+  toDate: Date;
+}
+

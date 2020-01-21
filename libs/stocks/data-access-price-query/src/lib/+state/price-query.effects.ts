@@ -6,7 +6,7 @@ import {
 } from '@coding-challenge/stocks/data-access-app-config';
 import { Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import {
   FetchPriceQuery,
   PriceQueryActionTypes,
@@ -15,6 +15,8 @@ import {
 } from './price-query.actions';
 import { PriceQueryPartialState } from './price-query.reducer';
 import { PriceQueryResponse } from './price-query.type';
+import { isWithinRange } from 'date-fns';
+
 
 @Injectable()
 export class PriceQueryEffects {
@@ -24,12 +26,14 @@ export class PriceQueryEffects {
       run: (action: FetchPriceQuery, state: PriceQueryPartialState) => {
         return this.httpClient
           .get(
-            `${this.env.apiURL}/beta/stock/${action.symbol}/chart/${
-              action.period
+            `${this.env.apiURL}/beta/stock/${action.request.symbol}/chart/${
+              action.request.period
             }?token=${this.env.apiKey}`
           )
           .pipe(
-            map(resp => new PriceQueryFetched(resp as PriceQueryResponse[]))
+            map((resp:any[]) => new PriceQueryFetched(resp.filter(
+              data => isWithinRange(new Date(data.date).toDateString(), action.request.fromDate.toDateString(),
+              action.request.toDate.toDateString())) as PriceQueryResponse[]))
           );
       },
 

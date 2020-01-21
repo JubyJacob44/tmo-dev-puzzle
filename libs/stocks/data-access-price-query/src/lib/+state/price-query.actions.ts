@@ -1,16 +1,17 @@
 import { Action } from '@ngrx/store';
-import { PriceQueryResponse } from './price-query.type';
+import { PriceQueryResponse, PriceQueryRequest } from './price-query.type';
+
 
 export enum PriceQueryActionTypes {
-  SelectSymbol = 'priceQuery.selectSymbol',
-  FetchPriceQuery = 'priceQuery.fetch',
-  PriceQueryFetched = 'priceQuery.fetched',
-  PriceQueryFetchError = 'priceQuery.error'
+  SelectSymbol = '[Stocks Report] priceQuery.selectSymbol',
+  FetchPriceQuery = '[Stocks Report] priceQuery.fetch',
+  PriceQueryFetched = '[Stocks Report] priceQuery.fetched',
+  PriceQueryFetchError = '[Stocks Report] priceQuery.error'
 }
 
 export class FetchPriceQuery implements Action {
   readonly type = PriceQueryActionTypes.FetchPriceQuery;
-  constructor(public symbol: string, public period: string) {}
+  constructor(public request: PriceQueryRequest) {}
 }
 
 export class PriceQueryFetchError implements Action {
