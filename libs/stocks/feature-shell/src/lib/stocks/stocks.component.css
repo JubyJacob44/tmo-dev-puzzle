@@ -1,3 +1,11 @@
 mat-form-field {
   display: block;
 }
+
+.stock_error {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  margin:10px 22px;
+  font-size:2em;
+  vertical-align:middle;
+}
