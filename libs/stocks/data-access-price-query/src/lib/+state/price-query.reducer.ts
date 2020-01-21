@@ -7,6 +7,7 @@ export const PRICEQUERY_FEATURE_KEY = 'priceQuery';
 
 export interface PriceQueryState extends EntityState<PriceQuery> {
   selectedSymbol: string;
+  error: string;
 }
 
 export function sortByDateNumeric(a: PriceQuery, b: PriceQuery): number {
@@ -25,7 +26,8 @@ export interface PriceQueryPartialState {
 }
 
 export const initialState: PriceQueryState = priceQueryAdapter.getInitialState({
-  selectedSymbol: ''
+  selectedSymbol: '',
+  error: ''
 });
 
 export function priceQueryReducer(
@@ -43,6 +45,12 @@ export function priceQueryReducer(
       return {
         ...state,
         selectedSymbol: action.symbol
+      };
+    }
+    case PriceQueryActionTypes.PriceQueryFetchError: {
+      return {
+        ...state,
+        error: action.error
       };
     }
   }

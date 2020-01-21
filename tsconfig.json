@@ -26,7 +26,8 @@
       ],
       "@coding-challenge/stocks/data-access-app-config": [
         "libs/stocks/data-access-app-config/src/index.ts"
-      ]
+      ],
+      "@coding-challenge/common/util": ["libs/common/util/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
